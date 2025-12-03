@@ -12,49 +12,50 @@ permissions:
 
 jobs:
   deploy:
-    needs: build-and-test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
     steps:
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: dist-travel365
-          path: dist/
+      # Checkout source code
+      - name: Checkout code
+        uses: actions/checkout@v4
 
+      # Set AWS/ECR environment variables
       - name: Set AWS/ECR environment variables
         run: |
           echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> $GITHUB_ENV
           echo "ECR_REPOSITORY=${{ secrets.ECR_REPOSITORY_NAME }}" >> $GITHUB_ENV
           echo "IMAGE_URI=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY_NAME }}:${{ github.sha }}" >> $GITHUB_ENV
 
-      - name: Configure AWS credentials (assume role via OIDC)
+      # Configure AWS credentials using OIDC
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      # Ensure ECR repository exists
       - name: Ensure ECR repository exists
         run: |
           aws ecr describe-repositories --repository-names "$ECR_REPOSITORY" >/dev/null 2>&1 || \
-            aws ecr create-repository --repository-name "$ECR_REPOSITORY"
+          aws ecr create-repository --repository-name "$ECR_REPOSITORY"
 
+      # Login to Amazon ECR
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
+      # Build and push Docker image
       - name: Build and push Docker image to ECR
-        id: build_and_push
         uses: docker/build-push-action@v4
         with:
           context: ./travel365
           file: ./travel365/Dockerfile
           push: true
-          tags: |
-            ${{ env.IMAGE_URI }}
+          tags: ${{ env.IMAGE_URI }}
           build-args: |
             NODE_ENV=production
 
+      # Trigger infrastructure repo workflow
       - name: Dispatch to infrastructure repo
         uses: peter-evans/repository-dispatch@v2
         with:
