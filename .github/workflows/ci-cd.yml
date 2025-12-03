@@ -5,13 +5,6 @@ on:
     branches: [ main, develop, scaffold/week1-setup ]
   pull_request:
     branches: [ main, develop ]
-name: CI/CD Pipeline
-
-on:
-  push:
-    branches: [ main, develop, scaffold/week1-setup ]
-  pull_request:
-    branches: [ main, develop ]
 
 permissions:
   id-token: write
@@ -110,33 +103,3 @@ jobs:
           repository: ${{ secrets.INFRA_REPO }}
           event-type: frontend_deployed
           client-payload: '{"image":"${{ env.IMAGE_URI }}"}'
-
-    - name: Ensure ECR repository exists
-      run: |
-        aws ecr describe-repositories --repository-names "$REPO" >/dev/null 2>&1 || \
-          aws ecr create-repository --repository-name "$REPO"
-      env:
-        REPO: ${{ secrets.ECR_REPOSITORY_NAME }}
-
-    - name: Login to Amazon ECR
-      uses: aws-actions/amazon-ecr-login@v2
-
-    - name: Build and push Docker image to ECR
-      id: ecr
-      uses: docker/build-push-action@v4
-      with:
-        context: ./travel365
-        file: ./travel365/Dockerfile
-        push: true
-        tags: |
-          ${{ env.IMAGE_URI }}
-        build-args: |
-          NODE_ENV=production
-
-    - name: Dispatch to Terraform repo (trigger infra deploy)
-      uses: peter-evans/repository-dispatch@v2
-      with:
-        token: ${{ secrets.REPO_TRIGGER_TOKEN }}
-        repository: ${{ secrets.INFRA_REPO }}
-        event-type: frontend_deployed
-        client-payload: '{"image":"${{ env.IMAGE_URI }}"}'
