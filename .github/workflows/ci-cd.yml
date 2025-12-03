@@ -41,7 +41,7 @@ jobs:
       - name: Build production
         run: |
           cd travel365
-          npm run build
+          ng build
         env:
           CI: true
 
