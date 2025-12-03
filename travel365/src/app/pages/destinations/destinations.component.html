@@ -1,0 +1,21 @@
+<div class="destinations-container">
+    <header class="page-header">
+        <h1>{{ title }}</h1>
+        <p>Discover amazing places around the world</p>
+    </header>
+
+    <div class="destinations-grid">
+        <div class="destination-card" *ngFor="let destination of destinations">
+            <div class="destination-image">{{ destination.image }}</div>
+            <div class="destination-info">
+                <h3>{{ destination.name }}</h3>
+                <p class="country">{{ destination.country }}</p>
+                <div class="destination-meta">
+                    <span class="price">${{ destination.price }}</span>
+                    <span class="rating">⭐ {{ destination.rating }}</span>
+                </div>
+                <button class="book-button">Book Now</button>
+            </div>
+        </div>
+    </div>
+</div>

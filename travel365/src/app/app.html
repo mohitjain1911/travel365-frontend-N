@@ -1,0 +1,20 @@
+<header class="main-header">
+  <div class="header-content">
+    <div class="logo">{{ title }}</div>
+    <nav class="nav-menu">
+      @for (link of navLinks; track link.path) {
+      <a [routerLink]="link.path" routerLinkActive="active" class="nav-link">
+        {{ link.label }}
+      </a>
+      }
+    </nav>
+  </div>
+</header>
+
+<main class="main-content">
+  <router-outlet />
+</main>
+
+<footer class="main-footer">
+  <p>&copy; {{ currentYear }} Travel365. All rights reserved.</p>
+</footer>

@@ -1,0 +1,18 @@
+<div class="home-container">
+    <section class="hero">
+        <h1>{{ title }}</h1>
+        <p class="subtitle">{{ subtitle }}</p>
+        <button class="cta-button">Start Your Journey</button>
+    </section>
+
+    <section class="features">
+        <h2>Why Choose Travel365?</h2>
+        <div class="features-grid">
+            <div class="feature-card" *ngFor="let feature of features">
+                <div class="icon">{{ feature.icon }}</div>
+                <h3>{{ feature.title }}</h3>
+                <p>{{ feature.description }}</p>
+            </div>
+        </div>
+    </section>
+</div>

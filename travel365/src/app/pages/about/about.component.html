@@ -1,0 +1,39 @@
+<div class="about-container">
+    <section class="about-hero">
+        <h1>{{ title }}</h1>
+        <p class="mission">{{ mission }}</p>
+    </section>
+
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-card" *ngFor="let stat of stats">
+                <h3>{{ stat.value }}</h3>
+                <p>{{ stat.label }}</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="story-section">
+        <h2>Our Story</h2>
+        <p>
+            Founded in 2010, Travel365 has been dedicated to making travel dreams come true.
+            We believe that everyone deserves to explore the world and create unforgettable memories.
+            Our team of travel experts works tirelessly to curate the best experiences for our customers.
+        </p>
+        <p>
+            With partnerships across the globe and a commitment to exceptional service,
+            we've helped thousands of travelers discover new destinations, cultures, and adventures.
+        </p>
+    </section>
+
+    <section class="team-section">
+        <h2>Meet Our Team</h2>
+        <div class="team-grid">
+            <div class="team-card" *ngFor="let member of team">
+                <div class="avatar">{{ member.avatar }}</div>
+                <h3>{{ member.name }}</h3>
+                <p>{{ member.role }}</p>
+            </div>
+        </div>
+    </section>
+</div>
