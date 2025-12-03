@@ -37,7 +37,8 @@ jobs:
       #   run: |
       #     cd travel365
       #     npm run test -- --watch=false
-
+      - name: Install Angular CLI
+        run: npm install -g @angular/cli
       - name: Build production
         run: |
           cd travel365
@@ -45,8 +46,7 @@ jobs:
         env:
           CI: true
       
-      - name: Install Angular CLI
-        run: npm install -g @angular/cli
+      
 
 
       - name: Upload build artifacts
