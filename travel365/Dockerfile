@@ -15,7 +15,7 @@ RUN npm run build --silent
 FROM nginx:stable-alpine AS runtime
 
 RUN rm -rf /usr/share/nginx/html/*
-COPY --from=builder /app/dist/travel365 /usr/share/nginx/html
+COPY --from=builder /app/dist/travel365/browser /usr/share/nginx/html
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
